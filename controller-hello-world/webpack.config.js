@@ -55,7 +55,7 @@ module.exports = {
     host: '0.0.0.0'
   },
   entry: {
-    build: './index.js'
+    build: './src/index.js'
   },
   output: {
     path: `${__dirname}/build`,

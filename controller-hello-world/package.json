@@ -24,6 +24,7 @@
     "aframe-physics-system": "^4.0.1",
     "aframe-super-hot-html-loader": "^2.1.0",
     "aframe-super-hot-loader": "^1.7.0",
+    "aframe-tangram-component": "^2.3.0",
     "aframe-teleport-controls": "^0.3.1",
     "babel-loader": "^8.0.6",
     "babel-minify-webpack-plugin": "^0.3.1",

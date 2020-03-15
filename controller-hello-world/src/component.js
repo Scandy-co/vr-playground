@@ -1,23 +1,14 @@
-// AFRAME first!
-require("aframe")
-
-// require("aframe-event-set-component")
-// require("aframe-particle-system-component")
-require("aframe-extras")
-require("aframe-physics-system")
-require("aframe-physics-extras")
-require("aframe-teleport-controls")
 
 AFRAME.registerComponent("input-listen", {
   init: function() {
     // Declaration and initialization of flag
-    // which exprains grip button is pressed or not.
+    // which explains grip button is pressed or not.
     // "this.el" reffers ctlR or L in this function
     this.el.grip = false
 
     // Called when trigger is pressed
     this.el.addEventListener("triggerdown", function(e) {
-      // "this" reffers ctlR or L in this function
+      // "this" refers ctlR or L in this function
       var point = this.object3D.getWorldPosition()
 
       // txt.setAttribute("value",point.x.toFixed(2)+","+point.y.toFixed(2)+","+point.z.toFixed(2));
@@ -32,7 +23,7 @@ AFRAME.registerComponent("input-listen", {
       // Getting raycaster which was attached to ctrlR or L
       var dir = this.getAttribute("raycaster").direction
 
-      // Setting shoot dierction and speed
+      // Setting shoot direction and speed
       var force = new THREE.Vector3(dir.x, dir.y, dir.z)
       force.multiplyScalar(2000)
       ball.force = this.object3D.localToWorld(force)
@@ -59,6 +50,7 @@ AFRAME.registerComponent("input-listen", {
       // Setting grip flag as true.
       this.grip = true
     })
+
     // Grip Released
     this.el.addEventListener("gripup", function(e) {
       // Setting grip flag as false.
@@ -76,7 +68,7 @@ AFRAME.registerComponent("input-listen", {
       this.selectedObj = null
     })
 
-    // A-buttorn Pressed
+    // A-button Pressed
     this.el.addEventListener("abuttondown", function(e) {
       // Aqurire all ball entities which are instantiated in a-scene
       var els = document.querySelectorAll(".ball")
@@ -86,13 +78,13 @@ AFRAME.registerComponent("input-listen", {
       }
     })
 
-    // X-buttorn Pressed
+    // X-button Pressed
     this.el.addEventListener("xbuttondown", function(e) {
       // Start pointing position to teleport
       this.emit("teleportstart")
     })
 
-    // X-buttorn Released
+    // X-button Released
     this.el.addEventListener("xbuttonup", function(e) {
       // Jump to pointed position
       this.emit("teleportend")

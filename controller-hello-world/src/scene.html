@@ -1,0 +1,36 @@
+<a-scene
+  physics="debug: false; gravity: 0; restitution: 0.9; "
+  background="color: #AAAAAA"
+>
+  <require path="player.html"></require>
+  <require path="environment.html"></require>
+
+  <!-- collidable:enable to be detect intersection with raycaster -->
+  <!--static-body:disable using gravity but can interact with physics objects-->
+  <a-sphere
+    class="collidable"
+    dynamic-body="gravity: 0; mass: 5"
+    position="0 1.25 -4"
+    radius="0.8"
+    color="#EF2D5E"
+    shadow
+  ></a-sphere>
+  <a-cylinder
+    class="collidable"
+    dynamic-body="gravity: 0; mass: 5"
+    position="1 0.75 -1.5"
+    radius="0.5"
+    height="1.5"
+    color="#FFC65D"
+    shadow
+  ></a-cylinder>
+  <a-box
+    class="collidable"
+    static-body
+    position="-1 0.5 -2"
+    rotation="0 0 0"
+    color="#4CC3D9"
+    shadow
+  >
+  </a-box>
+</a-scene>
