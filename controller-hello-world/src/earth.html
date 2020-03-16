@@ -3,7 +3,7 @@
   <img id="earth-displacement" src="/assets/earth/earthbump1k.jpg" />
 </a-assets>
 
-<a-entity position="-2 1.25 -3">
+<a-entity class="collidable" static-body position="-2 1.25 -3">
   <a-entity
     id="earth-wrap"
     rotation="-23.5 0 0"
@@ -16,8 +16,6 @@
   >
     <a-sphere
       id="earth-obj"
-      class="collidable"
-      static-body
       radius="0.5"
       src="#earth-map"
       normal-map="#earth-displacement"

@@ -7,6 +7,7 @@ require("aframe-extras")
 require("aframe-physics-system")
 require("aframe-physics-extras")
 require("aframe-teleport-controls")
+require("aframe-tangram-component")
 
 require('./component.js')
 
