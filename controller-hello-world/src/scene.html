@@ -1,36 +1,49 @@
 <a-scene
   physics="debug: false; gravity: 0; restitution: 0.9; "
   background="color: #AAAAAA"
+  fog="type: linear; color: #AAA; near: 5; far: 25"
+  shadow="type: pcfsoft"
 >
-  <require path="player.html"></require>
-  <require path="environment.html"></require>
+  <!-- light="defaultLightsEnabled: false" -->
+  <require path="./player.html"></require>
+  <require path="./earth.html"></require>
+  <require path="./environment.html"></require>
+
+  <!-- Default lighting injected by A-Frame. -->
+  <a-entity
+    id="main-ambient-light"
+    light="type: ambient; color: #BBB"
+  ></a-entity>
+  <!-- <a-entity
+    id="main-direction-light"
+    light="type: directional; color: #FFF; intensity: 0.6; castShadow"
+    position="-0.5 1 -8"
+  ></a-entity> -->
 
   <!-- collidable:enable to be detect intersection with raycaster -->
   <!--static-body:disable using gravity but can interact with physics objects-->
-  <a-sphere
-    class="collidable"
-    dynamic-body="gravity: 0; mass: 5"
-    position="0 1.25 -4"
-    radius="0.8"
-    color="#EF2D5E"
-    shadow
-  ></a-sphere>
-  <a-cylinder
-    class="collidable"
-    dynamic-body="gravity: 0; mass: 5"
-    position="1 0.75 -1.5"
-    radius="0.5"
-    height="1.5"
-    color="#FFC65D"
-    shadow
-  ></a-cylinder>
+
   <a-box
     class="collidable"
+    id="table"
     static-body
-    position="-1 0.5 -2"
+    width="5"
+    height="0.1"
+    depth="2"
+    position="0 0.6 -3"
     rotation="0 0 0"
-    color="#4CC3D9"
     shadow
+    color="tomato"
   >
   </a-box>
+
+  <a-curvedimage
+    src="#my-image"
+    height="5.0"
+    radius="5.7"
+    theta-length="72"
+    rotation="0 100 0"
+    position="0 2.3 -3"
+    scale="0.8 0.8 0.8"
+  ></a-curvedimage>
 </a-scene>

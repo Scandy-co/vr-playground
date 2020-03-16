@@ -1,67 +1,106 @@
-<!--a-plane:representing walls of virtual room-->
+<a-assets>
+  <img id="floor-map" src="/assets/floor/map1K.jpg" />
+  <img id="floor-bump" src="/assets/floor/bump1K.jpg" />
+  <img id="floor-normal" src="/assets/floor/normal1K.jpg" />
+
+  <img id="ceiling-map" src="/assets/ceiling/map1K.jpg" />
+  <img id="ceiling-bump" src="/assets/ceiling/bump1K.jpg" />
+  <img id="ceiling-normal" src="/assets/ceiling/normal1K.jpg" />
+
+  <img id="wall-map" src="/assets/wall/map1K.jpg" />
+  <img id="wall-bump" src="/assets/wall/bump1K.jpg" />
+  <img id="wall-normal" src="/assets/wall/normal1K.jpg" />
+</a-assets>
+
 <a-plane
   static-body
+  id="bottom-wall"
   position="0 0 0"
   rotation="-90 0 0"
-  width="10"
-  height="10"
-  color="#7BC8A4"
-  src="https://cdn.glitch.com/67846953-b370-4fea-981d-b28f8898e3c7%2Fback.png?v=1560490137540"
+  repeat="2 2"
+  width="50"
+  height="50"
+  src="#floor-map"
+  normal-map="#floor-normal"
+  displacement-map="#floor-bump"
+  displacement-bias="0.0"
+  displacement-scale="0.01"
   shadow
 >
 </a-plane>
 <a-plane
+  id="top-wall"
   static-body
-  position="0 5 0"
+  position="0 9 0"
   rotation="90 0 0"
-  width="10"
-  height="10"
-  color="#7BC8A4"
-  src="https://cdn.glitch.com/67846953-b370-4fea-981d-b28f8898e3c7%2Fback.png?v=1560490137540"
+  width="50"
+  height="50"
+  repeat="5 5"
+  color="#fcfcfc"
   shadow
 >
 </a-plane>
 <a-plane
   static-body
-  position="0 2.5 -5"
+  id="front-wall"
+  position="0 4.5 -15"
   rotation="0 0 0"
-  width="10"
-  height="5"
-  color="#7BC8FF"
-  src="https://cdn.glitch.com/67846953-b370-4fea-981d-b28f8898e3c7%2Fback.png?v=1560490137540"
+  width="50"
+  height="10"
   shadow
+  repeat="5 1"
+  color="#f1f1f1"
+  src="#wall-map"
+  displacement-map="#wall-bump"
+  displacement-bias="0.0"
+  displacement-scale="0.01"
 >
 </a-plane>
 <a-plane
   static-body
-  position="0 2.5 5"
+  id="rear-wall"
+  position="0 4.5 15"
   rotation="0 180 0"
-  width="10"
-  height="5"
-  color="#7BC8FF"
-  src="https://cdn.glitch.com/67846953-b370-4fea-981d-b28f8898e3c7%2Fback.png?v=1560490137540"
+  width="50"
+  height="10"
   shadow
+  repeat="5 1"
+  color="#f1f1f1"
+  src="#wall-map"
+  displacement-map="#wall-bump"
+  displacement-bias="0.0"
+  displacement-scale="0.01"
 >
 </a-plane>
 <a-plane
   static-body
-  position="5 2.5 0"
+  id="right-wall"
+  position="15 4.5 0"
   rotation="0 -90 0"
-  width="10"
-  height="5"
-  color="#7BC8FF"
-  src="https://cdn.glitch.com/67846953-b370-4fea-981d-b28f8898e3c7%2Fback.png?v=1560490137540"
+  width="50"
+  height="10"
   shadow
+  repeat="5 1"
+  color="#f1f1f1"
+  src="#wall-map"
+  displacement-map="#wall-bump"
+  displacement-bias="0.0"
+  displacement-scale="0.01"
 >
 </a-plane>
 <a-plane
+  id="left-wall"
   static-body
-  position="-5 2.5 0"
+  position="-15 5.5 0"
   rotation="0 90 0"
-  width="10"
-  height="5"
-  color="#7BC8FF"
-  src="https://cdn.glitch.com/67846953-b370-4fea-981d-b28f8898e3c7%2Fback.png?v=1560490137540"
+  width="50"
+  height="10"
   shadow
+  repeat="5 1"
+  color="#f1f1f1"
+  src="#wall-map"
+  displacement-map="#wall-bump"
+  displacement-bias="0.0"
+  displacement-scale="0.01"
 >
 </a-plane>

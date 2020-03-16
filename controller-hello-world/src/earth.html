@@ -1,0 +1,54 @@
+<a-assets>
+  <img id="earth-map" src="/assets/earth/earthmap1k.jpg" />
+  <img id="earth-displacement" src="/assets/earth/earthbump1k.jpg" />
+</a-assets>
+
+<a-entity position="-2 1.25 -3">
+  <a-entity
+    id="earth-wrap"
+    rotation="-23.5 0 0"
+    animation="
+      property: rotation;
+      to: 0 360 0;
+      loop: true;
+      dur: 30000;
+      easing: linear;"
+  >
+    <a-sphere
+      id="earth-obj"
+      class="collidable"
+      static-body
+      radius="0.5"
+      src="#earth-map"
+      normal-map="#earth-displacement"
+      displacement-map="#earth-displacement"
+      displacement-scale="0.05"
+      displacement-bias="0.1"
+      double-side
+      segments-height="64"
+      segments-width="128"
+      shadow
+    ></a-sphere>
+    <a-entity
+      position="0.9 0 0.9"
+      id="earth-direction-light"
+      light="
+      type: directional;
+      castShadow: true;
+      intensity: 0.4;
+      target:#earth-obj;"
+    >
+    </a-entity>
+  </a-entity>
+  <a-entity
+    id="moon-wrap"
+    animation="
+      property: rotation;
+      to: 0 -360 0;
+      loop: true;
+      dur: 14000;
+      easing: linear;"
+  >
+    <a-sphere position="0.9 0 0.9" radius="0.1" color="#cccccc"></a-sphere>
+  </a-entity>
+</a-entity>
