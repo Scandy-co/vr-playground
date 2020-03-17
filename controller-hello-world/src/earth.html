@@ -1,52 +1,77 @@
-<a-assets>
-  <img id="earth-map" src="/assets/earth/earthmap1k.jpg" />
-  <img id="earth-displacement" src="/assets/earth/earthbump1k.jpg" />
-</a-assets>
+<a-entity position="12 0 3" rotation="0 -90 0">
+  <a-tangram-map
+    api-key="UJcQwnnfQnWcPtKe2aYaEw"
+    width="16"
+    height="8"
+    map-style="#map-style"
+    center="-87.629799, 41.878113"
+    zoom="14"
+    px-world-ratio="128"
+    material="side: double"
+    position="0 4.5 -2.9"
+  >
+  </a-tangram-map>
 
-<a-entity class="collidable" static-body position="-2 1.25 -3">
   <a-entity
-    id="earth-wrap"
-    rotation="-23.5 0 0"
-    animation="
+    id="earth-moon-wrap"
+    class="collidable"
+    position="8 3 2"
+    body="type: static; shape: sphere; sphereRadius:0.5;"
+  >
+    <a-entity
+      id="earth-wrap"
+      animation="
       property: rotation;
       to: 0 360 0;
       loop: true;
       dur: 30000;
       easing: linear;"
-  >
-    <a-sphere
-      id="earth-obj"
-      radius="0.5"
-      src="#earth-map"
-      normal-map="#earth-displacement"
-      displacement-map="#earth-displacement"
-      displacement-scale="0.05"
-      displacement-bias="0.1"
-      double-side
-      segments-height="64"
-      segments-width="128"
-      shadow
-    ></a-sphere>
-    <a-entity
-      position="0.9 0 0.9"
-      id="earth-direction-light"
-      light="
-      type: directional;
-      castShadow: true;
-      intensity: 0.4;
-      target:#earth-obj;"
     >
+      <a-sphere
+        id="earth-obj"
+        radius="1"
+        src="#earth-map"
+        displacement-map="#earth-displacement"
+        displacement-scale="0.05"
+        displacement-bias="0.1"
+        segments-height="64"
+        segments-width="128"
+        shadow
+      ></a-sphere>
+      <a-entity
+        position="0.1 2 0.1"
+        id="earth-direction-light"
+        light="
+          type: directional;
+          castShadow: true;
+          intensity: 0.4;
+          target:#earth-obj;
+        "
+      >
+      </a-entity>
     </a-entity>
-  </a-entity>
-  <a-entity
-    id="moon-wrap"
-    animation="
+    <a-entity id="moon-wrap" rotation="23.5 0 0">
+      <a-entity
+        animation="
       property: rotation;
       to: 0 -360 0;
       loop: true;
       dur: 14000;
       easing: linear;"
-  >
-    <a-sphere position="0.9 0 0.9" radius="0.1" color="#cccccc"></a-sphere>
+      >
+        <a-sphere
+          src="#moon-map"
+          displacement-map="#moon-bump"
+          displacement-scale="0.1"
+          displacement-bias="0.3"
+          segments-height="32"
+          segments-width="64"
+          position="2 0 2"
+          radius="1"
+          color="#cccccc"
+          scale="0.2 0.2 0.2"
+        ></a-sphere>
+      </a-entity>
+    </a-entity>
   </a-entity>
 </a-entity>

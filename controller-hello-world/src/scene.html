@@ -1,22 +1,14 @@
 <a-scene
-  physics="debug: false; gravity: 0; restitution: 0.9; "
+  physics="debug: true; gravity: 0; restitution: 0.9; driver: worker;"
   background="color: #AAAAAA"
   fog="type: linear; color: #AAA; near: 5; far: 25"
   shadow="type: pcfsoft"
 >
   <!-- light="defaultLightsEnabled: false" -->
+  <require path="./assets.html"></require>
   <require path="./player.html"></require>
   <require path="./earth.html"></require>
   <require path="./environment.html"></require>
-
-  <a-assets>
-    <video
-      id="big-screen"
-      autoplay
-      loop="true"
-      src="https://media.giphy.com/media/l3nWhI38IWDofyDrW/giphy.mp4"
-    ></video>
-  </a-assets>
 
   <!-- Default lighting injected by A-Frame. -->
   <a-entity
@@ -46,21 +38,11 @@
   >
   </a-box>
 
-  <!-- <a-tangram-map
-    id="map"
-    position="0 0 -5"
-    width="7"
-    height="5"
-    api-key="UJcQwnnfQnWcPtKe2aYaEw"
-    center="41.878113, -87.629799"
-    zoom="12"
-    px-world-ratio="100"
-  >
-  </a-tangram-map> -->
+  <!-- center="16, 48" -->
 
-  <a-curvedimage
+  <!-- <a-curvedimage
     class="collidable"
-    static-body
+    static-body="hull"
     src="https://media.giphy.com/media/l3nWhI38IWDofyDrW/giphy.gif"
     height="4.0"
     radius="5.7"
@@ -69,11 +51,11 @@
     position="0 2.3 -3"
     scale="0.8 0.8 0.8"
   ></a-curvedimage>
-
+  -->
   <a-video
+    src="#big-screen"
     class="collidable"
     static-body
-    src="#big-screen"
     height="4.0"
     width="6.0"
     rotation="0 30 0"
@@ -83,7 +65,11 @@
   <a-entity
     class="collidable"
     static-body
-    scvv="volume: 1; src: //d2a0b7lq85v0ro.cloudfront.net/public/hoxels/NSkPOPbb7MG11HfRXzhp"
+    scvv="
+      src: //d2a0b7lq85v0ro.cloudfront.net/public/hoxels/NSkPOPbb7MG11HfRXzhp;
+      volume:1;
+      loop: true;
+    "
     id="loading-hoxel"
     position="0.2 2 -3.78"
     rotation="0 -11.7 0"
