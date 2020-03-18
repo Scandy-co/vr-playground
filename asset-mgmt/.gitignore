@@ -1,0 +1,14 @@
+*.ply
+*.obj
+*.zip
+*.stl
+*.glb
+*.gltf
+*.png
+*.jpg
+*.tif
+*.scrvv
+*.drc
+*.draco
+*.dae
+*.usd*
