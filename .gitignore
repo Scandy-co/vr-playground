@@ -1,5 +1,6 @@
 *.ply
 *.obj
+*.mtl
 *.zip
 *.stl
 *.glb
