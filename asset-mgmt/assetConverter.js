@@ -81,16 +81,28 @@ const loadMesh = async input_path => {
   if (ext == "gltf" || ext == "glb") {
     let gltf = {}
     if (ext == "gltf") {
-      gltf = bin
+      const results = await gltfPipeline.processGltf(bin)
+      gltf = results.gltf
     } else if (ext == "glb") {
       const results = await gltfPipeline.glbToGltf(bin)
-      gltf = JSON.stringify(results.gltf)
+      gltf = results.gltf
     }
+    gltf["asset"] = {
+      version: 1
+    }
+    gltf = JSON.stringify(gltf)
+
     loader = new THREE.GLTFLoader()
     const prom = new Promise((resolve, reject) => {
-      loader.parse(gltf, input_path, _gltf => {
-        return resolve(_gltf.scene)
-      })
+      loader.parse(
+        gltf,
+        input_path,
+        _gltf => {
+          // console.log("loaded _gltf", _gltf)
+          return resolve(_gltf.scene)
+        },
+        reject
+      )
     })
     mesh = await prom
   } else {
