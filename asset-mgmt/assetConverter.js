@@ -1,4 +1,3 @@
-
 /**
  * source inspiration:
  * https://gist.github.com/donmccurdy/9f094575c1f1a48a2ddda513898f6496
@@ -81,9 +80,11 @@ const loadMesh = input_path => {
   } else if (ext == "obj") {
     loader = new THREE.OBJLoader()
     mtlLoader = new THREE.MTLLoader()
-    let mtlPath = ""
-    let mtlBin = fs.readFileSync(mtlPath, "binary")
-    material = mtlLoader.parse(mtlBin)
+    let mtlPath = options.material
+    if (mtlPath) {
+      let mtlBin = fs.readFileSync(mtlPath, "binary")
+      material = mtlLoader.parse(mtlBin)
+    }
   }
 
   geometry = loader.parse(bin)
