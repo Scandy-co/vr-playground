@@ -12,3 +12,6 @@
 *.draco
 *.dae
 *.usd*
+
+node_modules/
+build/
