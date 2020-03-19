@@ -7,8 +7,8 @@ const gltfPipeline = require("gltf-pipeline")
 const commandLineArgs = require("command-line-args")
 
 // fix XMLHttpRequest and document issues for three.js on node
-var XMLHttpRequest = require("xhr2")
-global.XMLHttpRequest = XMLHttpRequest
+// var XMLHttpRequest = require("xhr2")
+// global.XMLHttpRequest = XMLHttpRequest
 
 const { Blob, FileReader } = require("vblob")
 const THREE = require("three")
@@ -38,10 +38,13 @@ require("three/examples/js/loaders/STLLoader")
 require("three/examples/js/loaders/PLYLoader")
 require("three/examples/js/loaders/OBJLoader")
 require("three/examples/js/loaders/MTLLoader")
+require("three/examples/js/loaders/GLTFLoader")
 require("three/examples/js/exporters/STLExporter")
 require("three/examples/js/exporters/OBJExporter")
 require("three/examples/js/exporters/PLYExporter")
 require("three/examples/js/exporters/GLTFExporter")
+
+const VALID_EXTS = ["stl", "obj", "ply", "glb", "gltf"]
 
 const optionDefinitions = [
   { name: "verbose", alias: "v", type: Boolean },
@@ -77,6 +80,8 @@ const loadMesh = input_path => {
     loader = new THREE.STLLoader()
   } else if (ext == "ply") {
     loader = new THREE.PLYLoader()
+  } else if (ext == "gltf" || ext == "glb") {
+    loader = new THREE.GLTFLoader()
   } else if (ext == "obj") {
     loader = new THREE.OBJLoader()
     mtlLoader = new THREE.MTLLoader()
@@ -110,7 +115,7 @@ const exportMesh = async (output_path, input) => {
       }
       if (ext == "gltf") {
         const processed = await gltfPipeline.processGltf(content, gltfOptions)
-        content = processed.gltf
+        content = JSON.stringify(processed.gltf)
       }
       fs.writeFileSync(output_path, content)
       resolve(output_path)
@@ -119,8 +124,11 @@ const exportMesh = async (output_path, input) => {
       console.log(`saving to: `, output_path)
       var exporter = null
       if (ext == "gltf" || ext == "glb") {
+        const opts = {
+          binary: false
+        }
         exporter = new THREE.GLTFExporter()
-        exporter.parse(input, onDone)
+        exporter.parse(input, onDone, opts)
       } else if (ext == "ply") {
         exporter = new THREE.PLYExporter()
         onDone(exporter.parse(input))
@@ -142,6 +150,16 @@ const exportMesh = async (output_path, input) => {
 
 let input_path = options["input"]
 let output_path = options["output"]
+
+if (!VALID_EXTS.includes(fileUtils.getFileExtension(input_path))) {
+  console.error(`${input_path} is not a valid extension`)
+  return -1
+}
+
+if (!VALID_EXTS.includes(fileUtils.getFileExtension(output_path))) {
+  console.error(`${output_path} is not a valid extension`)
+  return -1
+}
 
 console.log(`going to convert ${input_path} to ${output_path}`)
 let input_mesh = loadMesh(input_path)
