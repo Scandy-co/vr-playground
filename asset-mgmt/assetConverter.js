@@ -10,10 +10,12 @@ const commandLineArgs = require("command-line-args")
 // var XMLHttpRequest = require("xhr2")
 // global.XMLHttpRequest = XMLHttpRequest
 
+const atob = require("atob")
 const { Blob, FileReader } = require("vblob")
 const THREE = require("three")
 
 // Patch global scope to imitate browser environment.
+global.atob = atob
 global.window = global
 global.Blob = Blob
 global.FileReader = FileReader
@@ -65,7 +67,7 @@ const fileUtils = require("./fileUtils")
 
 const options = commandLineArgs(optionDefinitions)
 
-const loadMesh = input_path => {
+const loadMesh = async input_path => {
   let input_mesh = null
   const ext = fileUtils.getFileExtension(input_path)
 
@@ -73,27 +75,42 @@ const loadMesh = input_path => {
   var mesh = null
   var geometry = null
   var material = new THREE.MeshStandardMaterial()
-  let bin = fs.readFileSync(input_path, "binary")
+  let bin = fs.readFileSync(input_path)
 
   console.log("loading mesh from ", input_path)
-  if (ext == "stl") {
-    loader = new THREE.STLLoader()
-  } else if (ext == "ply") {
-    loader = new THREE.PLYLoader()
-  } else if (ext == "gltf" || ext == "glb") {
-    loader = new THREE.GLTFLoader()
-  } else if (ext == "obj") {
-    loader = new THREE.OBJLoader()
-    mtlLoader = new THREE.MTLLoader()
-    let mtlPath = options.material
-    if (mtlPath) {
-      let mtlBin = fs.readFileSync(mtlPath, "binary")
-      material = mtlLoader.parse(mtlBin)
+  if (ext == "gltf" || ext == "glb") {
+    let gltf = {}
+    if (ext == "gltf") {
+      gltf = bin
+    } else if (ext == "glb") {
+      const results = await gltfPipeline.glbToGltf(bin)
+      gltf = JSON.stringify(results.gltf)
     }
-  }
+    loader = new THREE.GLTFLoader()
+    const prom = new Promise((resolve, reject) => {
+      loader.parse(gltf, input_path, _gltf => {
+        return resolve(_gltf.scene)
+      })
+    })
+    mesh = await prom
+  } else {
+    if (ext == "stl") {
+      loader = new THREE.STLLoader()
+    } else if (ext == "ply") {
+      loader = new THREE.PLYLoader()
+    } else if (ext == "obj") {
+      loader = new THREE.OBJLoader()
+      mtlLoader = new THREE.MTLLoader()
+      let mtlPath = options.material
+      if (mtlPath) {
+        let mtlBin = fs.readFileSync(mtlPath, "binary")
+        material = mtlLoader.parse(mtlBin)
+      }
+    }
 
-  geometry = loader.parse(bin)
-  mesh = new THREE.Mesh(geometry, material)
+    geometry = loader.parse(bin)
+    mesh = new THREE.Mesh(geometry, material)
+  }
 
   return mesh
 }
@@ -162,9 +179,11 @@ if (!VALID_EXTS.includes(fileUtils.getFileExtension(output_path))) {
 }
 
 console.log(`going to convert ${input_path} to ${output_path}`)
-let input_mesh = loadMesh(input_path)
-console.log("loaded mesh ", input_path)
-exportMesh(output_path, input_mesh)
+loadMesh(input_path)
+  .then(input_mesh => {
+    console.log("loaded mesh ", input_path)
+    return exportMesh(output_path, input_mesh)
+  })
   .then(() => {
     console.log("ok")
   })

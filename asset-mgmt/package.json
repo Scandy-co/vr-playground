@@ -4,6 +4,7 @@
   "description": "asset manager",
   "license": "MIT",
   "dependencies": {
+    "atob": "^2.1.2",
     "command-line-args": "^5.1.1",
     "gltf-pipeline": "^2.1.8",
     "three": "^0.114.0",
