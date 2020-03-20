@@ -3,6 +3,8 @@
  * https://gist.github.com/donmccurdy/9f094575c1f1a48a2ddda513898f6496
  */
 const fs = require("fs")
+const path = require("path")
+
 const gltfPipeline = require("gltf-pipeline")
 const commandLineArgs = require("command-line-args")
 
@@ -12,6 +14,7 @@ const commandLineArgs = require("command-line-args")
 
 const atob = require("atob")
 const { Blob, FileReader } = require("vblob")
+const { Image } = require("image-js")
 const THREE = require("three")
 
 // Patch global scope to imitate browser environment.
@@ -24,6 +27,16 @@ global.THREE = THREE
 // const Canvas = require("canvas")
 const Canvas = false
 global.document = {
+  createElementNS: (namespaceURI, qualifiedName) => {
+    if (qualifiedName == "img") {
+      const img = new Image()
+      img.addEventListener = ( name, fn ) => {
+        // if (name == 'load') 
+      }
+      return img
+    }
+    throw new Error(`Cannot create node ${qualifiedName}`)
+  },
   createElement: nodeName => {
     if (!Canvas || nodeName !== "canvas")
       throw new Error(`Cannot create node ${nodeName}`)
@@ -36,6 +49,11 @@ global.document = {
   }
 }
 
+// GLTFLoader is more efficient with access to a TextDecoder instance, which is
+// in the global namespace in the browser.
+global.TextDecoder = require("util").TextDecoder
+
+// requires will add these to the THREE namespace
 require("three/examples/js/loaders/STLLoader")
 require("three/examples/js/loaders/PLYLoader")
 require("three/examples/js/loaders/OBJLoader")
@@ -45,6 +63,14 @@ require("three/examples/js/exporters/STLExporter")
 require("three/examples/js/exporters/OBJExporter")
 require("three/examples/js/exporters/PLYExporter")
 require("three/examples/js/exporters/GLTFExporter")
+
+// Custom-built version of DRACOLoader, for Node.js.
+const NodeDRACOLoader = require("./NodeDRACOLoader.js")
+
+// GLTFLoader prefetches the decoder module, when Draco is needed, to speed up
+// parsing later. This isn't necessary for our custom decoder, so set the
+// method to a no-op.
+THREE.DRACOLoader.getDecoderModule = () => {}
 
 const VALID_EXTS = ["stl", "obj", "ply", "glb", "gltf"]
 
@@ -75,24 +101,31 @@ const loadMesh = async input_path => {
   var mesh = null
   var geometry = null
   var material = new THREE.MeshStandardMaterial()
-  let bin = fs.readFileSync(input_path)
 
   console.log("loading mesh from ", input_path)
   if (ext == "gltf" || ext == "glb") {
+    // GLTF loader wants a string
+    let bin = fs.readFileSync(input_path)
     let gltf = {}
+    const parentDir = path.dirname(input_path)
+    const opts = {
+      separateTextures: true,
+      resourceDirectory: parentDir
+    }
     if (ext == "gltf") {
-      const results = await gltfPipeline.processGltf(bin)
+      const results = await gltfPipeline.processGltf(JSON.parse(bin), opts)
       gltf = results.gltf
     } else if (ext == "glb") {
-      const results = await gltfPipeline.glbToGltf(bin)
+      const results = await gltfPipeline.glbToGltf(bin, opts)
       gltf = results.gltf
     }
-    gltf["asset"] = {
-      version: 1
-    }
+    // GLTFLoader.parse wants a string or "magic" data
     gltf = JSON.stringify(gltf)
 
     loader = new THREE.GLTFLoader()
+    // Patch the DracoLoader for our node use case
+    loader.setDRACOLoader(new NodeDRACOLoader())
+
     const prom = new Promise((resolve, reject) => {
       loader.parse(
         gltf,
@@ -106,6 +139,9 @@ const loadMesh = async input_path => {
     })
     mesh = await prom
   } else {
+    // All these loaders want binary data
+    let bin = fs.readFileSync(input_path, "binary")
+
     if (ext == "stl") {
       loader = new THREE.STLLoader()
     } else if (ext == "ply") {
