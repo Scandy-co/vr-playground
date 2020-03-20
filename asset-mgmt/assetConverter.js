@@ -30,8 +30,12 @@ global.document = {
   createElementNS: (namespaceURI, qualifiedName) => {
     if (qualifiedName == "img") {
       const img = new Image()
-      img.addEventListener = ( name, fn ) => {
-        // if (name == 'load') 
+      img.removeEventListener = (name, fn) => {
+        // console.log(`img.removeEventListener(${name},${fn})`)
+      }
+      img.addEventListener = (name, fn) => {
+        // console.log(`img.addEventListener(${name},${fn})`)
+        setTimeout(fn, 10)
       }
       return img
     }
@@ -48,6 +52,16 @@ global.document = {
     return canvas
   }
 }
+/**
+ * The Node.js filesystem API ('fs') returns a Buffer instance, which may be a
+ * view into a larger buffer. Because GLTFLoader parsing expects a raw
+ * ArrayBuffer, we make a trimmed copy of the original here.
+ *
+ * @param  {Buffer} buffer
+ * @return {ArrayBuffer}
+ */
+const trimBuffer = buffer =>
+  buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength)
 
 // GLTFLoader is more efficient with access to a TextDecoder instance, which is
 // in the global namespace in the browser.
@@ -104,7 +118,7 @@ const loadMesh = async input_path => {
 
   console.log("loading mesh from ", input_path)
   if (ext == "gltf" || ext == "glb") {
-    // GLTF loader wants a string
+    // gltfPipeline loader wants a string
     let bin = fs.readFileSync(input_path)
     let gltf = {}
     const parentDir = path.dirname(input_path)
@@ -121,6 +135,7 @@ const loadMesh = async input_path => {
     }
     // GLTFLoader.parse wants a string or "magic" data
     gltf = JSON.stringify(gltf)
+    console.log("processed to gltf from gltf-pipeline")
 
     loader = new THREE.GLTFLoader()
     // Patch the DracoLoader for our node use case
@@ -129,10 +144,14 @@ const loadMesh = async input_path => {
     const prom = new Promise((resolve, reject) => {
       loader.parse(
         gltf,
-        input_path,
-        _gltf => {
-          // console.log("loaded _gltf", _gltf)
-          return resolve(_gltf.scene)
+        "",
+        threeGLTF => {
+          // console.log("loaded threeGLTF", threeGLTF)
+          // const group = new THREE.Group()
+          // for (const child in threeGLTF.scene.children) {
+          //   group.add(child)
+          // }
+          return resolve(threeGLTF.scene)
         },
         reject
       )
