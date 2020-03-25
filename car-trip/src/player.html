@@ -1,0 +1,33 @@
+<a-entity id="cameraRig">
+  <a-entity id="head" camera wasd-controls look-controls></a-entity>
+  <a-entity
+    sphere-collider="objects: a-box"
+    super-hands
+    hand-controls="left"
+  ></a-entity>
+  <!-- <a-entity
+    sphere-collider="objects: a-box"
+    super-hands
+    hand-controls="right"
+  ></a-entity> -->
+  <a-entity
+    id="right-hand"
+    hand-controls="right"
+    laser-controls="hand: right"
+    input-listen
+  ></a-entity>
+
+  <!-- <a-entity
+    id="ctlL"
+    raycaster="objects: .collidable; far:1.2;"
+    laser-controls="hand: left"
+  >
+  </a-entity> -->
+  <!-- <a-entity
+    id="ctlR"
+    teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; startEvents: teleportstart; endEvents: teleportend"
+    input-listen
+    laser-controls="hand: right"
+  >
+  </a-entity> -->
+</a-entity>

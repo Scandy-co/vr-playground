@@ -1,0 +1,80 @@
+<a-assets>
+  <img id="floor-map" src="/assets/floor/map1K.jpg" />
+  <img id="wall-map" src="/assets/wall/map1K.jpg" />
+</a-assets>
+
+<a-plane
+  static-body
+  id="bottom-wall"
+  position="0 0 0"
+  rotation="-90 0 0"
+  repeat="2 2"
+  width="50"
+  height="50"
+  src="#floor-map"
+>
+</a-plane>
+<a-plane
+  id="top-wall"
+  static-body
+  position="0 9 0"
+  rotation="90 0 0"
+  width="50"
+  height="50"
+  repeat="5 5"
+  color="#fcfcfc"
+  shadow
+>
+</a-plane>
+<a-plane
+  static-body
+  id="front-wall"
+  position="0 4.5 -15"
+  rotation="0 0 0"
+  width="50"
+  height="10"
+  shadow
+  repeat="5 1"
+  color="#f1f1f1"
+  src="#wall-map"
+>
+</a-plane>
+<a-plane
+  static-body
+  id="rear-wall"
+  position="0 4.5 15"
+  rotation="0 180 0"
+  width="50"
+  height="10"
+  shadow
+  repeat="5 1"
+  color="#f1f1f1"
+  src="#wall-map"
+>
+</a-plane>
+<a-plane
+  static-body
+  id="right-wall"
+  position="15 4.5 0"
+  rotation="0 -90 0"
+  width="50"
+  height="10"
+  shadow
+  repeat="5 1"
+  color="#f1f1f1"
+  src="#wall-map"
+>
+</a-plane>
+<a-plane
+  id="left-wall"
+  static-body
+  position="-15 4.5 0"
+  rotation="0 90 0"
+  width="50"
+  height="10"
+  shadow
+  repeat="5 1"
+  color="#f1f1f1"
+  src="#wall-map"
+>
+</a-plane>

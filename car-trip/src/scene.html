@@ -1,0 +1,31 @@
+<a-scene physics="debug:true; restitution: 0.9" background="color: #AAAAAA">
+  <!-- light="defaultLightsEnabled: false" -->
+  <require path="./assets.html"></require>
+  <require path="./player.html"></require>
+  <!-- <require path="./environment.html"></require> -->
+
+  <!-- Default lighting injected by A-Frame. -->
+  <a-entity
+    id="main-ambient-light"
+    light="type: ambient; color: #BBB"
+  ></a-entity>
+
+  <a-box
+    id="template-contents"
+    hoverable
+    grabbabily
+    stretchable
+    draggable
+    dropppable
+    material="wireframe: true;"
+    position="0 1 -1"
+  >
+  </a-box>
+  <a-gltf-model
+    id="template-model"
+    normal-material
+    scale="1 1 1"
+  ></a-gltf-model>
+
+  <a-entity contents></a-entity>
+</a-scene>
