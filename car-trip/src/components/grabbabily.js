@@ -33,7 +33,6 @@ AFRAME.registerComponent(
 
       this.el.addEventListener(this.GRAB_EVENT, e => this.start(e))
       this.el.addEventListener(this.UNGRAB_EVENT, e => this.end(e))
-      this.el.addEventListener("mouseout", e => this.lostGrabber(e))
     },
     update: function() {
       this.physicsUpdate()
@@ -45,7 +44,7 @@ AFRAME.registerComponent(
       const grabeeMatrix = new window.THREE.Matrix4()
       const ignoreScale = new window.THREE.Vector3()
       return function() {
-        if (this.grabber) {
+        if (this.grabber && this.grabbed) {
           grabeeMatrix.multiplyMatrices(
             this.grabber.object3D.matrixWorld,
             this.grabOffsetMatrix
@@ -81,6 +80,7 @@ AFRAME.registerComponent(
           console.warn("grabbable entities must have an object3D")
           return
         }
+
         this.grabbers.push(evt.detail.hand)
         // initiate physics if available, otherwise manual
         if (!this.physicsStart(evt) && !this.grabber) {
@@ -100,15 +100,9 @@ AFRAME.registerComponent(
       if (evt.defaultPrevented || !this.endButtonOk(evt)) {
         return
       }
-      if (handIndex !== -1) {
-        this.grabbers.splice(handIndex, 1)
-        this.grabber = this.grabbers[0]
-      }
-      this.physicsEnd(evt)
-      if (!this.resetGrabber()) {
-        this.grabbed = false
-        this.el.removeState(this.GRABBED_STATE)
-      }
+      this.resetGrabber()
+      this.grabbed = false
+      this.el.removeState(this.GRABBED_STATE)
       if (evt.preventDefault) {
         evt.preventDefault()
       }
@@ -127,16 +121,5 @@ AFRAME.registerComponent(
       this.parentOffsetMatrix.getInverse(this.el.object3D.parent.matrixWorld)
       return true
     },
-    lostGrabber: function(evt) {
-      let i = this.grabbers.indexOf(evt.relatedTarget)
-      // if a queued, non-physics grabber leaves the collision zone, forget it
-      if (
-        i !== -1 &&
-        evt.relatedTarget !== this.grabber &&
-        !this.physicsIsConstrained(evt.relatedTarget)
-      ) {
-        this.grabbers.splice(i, 1)
-      }
-    }
   })
 )

@@ -13,7 +13,7 @@ AFRAME.registerComponent("contents", {
       "suite-case.ply.glb"
     ]
 
-    let radius = 2
+    let radius = 1.5
     let step = (files.length / Math.PI) * 2
     let theta = 0
     this.modelElTemplate = document.getElementById("template-model").cloneNode()
@@ -25,7 +25,7 @@ AFRAME.registerComponent("contents", {
     for (const file of files) {
       const modelEl = this.modelElTemplate.cloneNode()
       const parentEl = this.parentElTemplate.cloneNode()
-      modelEl.setAttribute("src", `./assets/car-trip/${file}`)
+      modelEl.setAttribute("gltf-model", `./assets/car-trip/${file}`)
       parentEl.appendChild(modelEl)
       parentEl.setAttribute("id", `contents-${file}-${theta}`)
 

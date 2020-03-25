@@ -1,8 +1,10 @@
 <a-entity id="cameraRig">
   <a-entity id="head" camera wasd-controls look-controls></a-entity>
   <a-entity
-    sphere-collider="objects: a-box"
+    sphere-collider="objects: a-sphere"
+    static-body="shape: sphere; sphereRadius: 0.02;"
     super-hands
+    grabStartButtons="abutton"
     hand-controls="left"
   ></a-entity>
   <!-- <a-entity

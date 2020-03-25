@@ -1,4 +1,7 @@
-<a-scene physics="debug:true; restitution: 0.9" background="color: #AAAAAA">
+<!-- physics="debug:false; restitution: 0.9; driver: worker" -->
+<a-scene
+  background="color: #AAAAAA"
+>
   <!-- light="defaultLightsEnabled: false" -->
   <require path="./assets.html"></require>
   <require path="./player.html"></require>
@@ -10,15 +13,13 @@
     light="type: ambient; color: #BBB"
   ></a-entity>
 
-  <a-box
+  <a-sphere
     id="template-contents"
     hoverable
     grabbabily
-    stretchable
-    draggable
-    dropppable
     material="wireframe: true;"
     position="0 1 -1"
+    radius="0.3"
   >
   </a-box>
   <a-gltf-model
