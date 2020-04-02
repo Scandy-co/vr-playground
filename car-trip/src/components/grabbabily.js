@@ -2,6 +2,7 @@
 const inherit = AFRAME.utils.extendDeep
 const physicsCore = require("super-hands/reaction_components/prototypes/physics-grab-proto.js")
 const buttonsCore = require("super-hands/reaction_components/prototypes/buttons-proto.js")
+
 // new object with all core modules
 const base = inherit({}, physicsCore, buttonsCore)
 AFRAME.registerComponent(
@@ -33,6 +34,7 @@ AFRAME.registerComponent(
 
       this.el.addEventListener(this.GRAB_EVENT, e => this.start(e))
       this.el.addEventListener(this.UNGRAB_EVENT, e => this.end(e))
+      this.el.addEventListener("mouseout", e => this.lostGrabber(e))
     },
     update: function() {
       this.physicsUpdate()
@@ -102,6 +104,8 @@ AFRAME.registerComponent(
       }
       this.resetGrabber()
       this.grabbed = false
+      this.grabbers = []
+      this.grabber = null
       this.el.removeState(this.GRABBED_STATE)
       if (evt.preventDefault) {
         evt.preventDefault()
@@ -121,5 +125,16 @@ AFRAME.registerComponent(
       this.parentOffsetMatrix.getInverse(this.el.object3D.parent.matrixWorld)
       return true
     },
+    lostGrabber: function(evt) {
+      let i = this.grabbers.indexOf(evt.relatedTarget)
+      // if a queued, non-physics grabber leaves the collision zone, forget it
+      if (
+        i !== -1 &&
+        evt.relatedTarget !== this.grabber &&
+        !this.physicsIsConstrained(evt.relatedTarget)
+      ) {
+        this.grabbers.splice(i, 1)
+      }
+    }
   })
 )
